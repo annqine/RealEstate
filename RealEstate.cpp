@@ -36,7 +36,6 @@ RealEstate::RealEstate() {
     User admin("a", "an_1", "0511111111", false);
     users.push_back(admin);
 }
-//надо или нет? мне кажется нет...
 string RealEstate::toString() const {
     std::ostringstream result;
 
@@ -52,7 +51,7 @@ string RealEstate::toString() const {
 };
 void RealEstate::createUser(){
     string username, password, phoneNumber;
-    bool isBroker;
+    unsigned int isBroker;
     std::cin.ignore(); 
 
     std::cout << "Введите желаемое имя пользователя: ";
@@ -72,38 +71,15 @@ void RealEstate::createUser(){
         getline(std::cin, phoneNumber);}
     std::cout << "Вы брокер? (1 - Да, 0 - Нет): ";
     std::cin >> isBroker;
+    while (isBroker != 1 && isBroker != 0) {
+        std::cout << "Неверный выбор. Повторите ввод: ";
+        std::cin >> isBroker;
+    };
 
     User newUser(username, password, phoneNumber, isBroker);
     users.push_back(newUser);
     std::cout << "Пользователь успешно создан!" << endl;
 }
-
-/*void RealEstate::createUser()
-{
-    string username, password, phoneNumber;
-    bool isBroker;
-    std::cout << "Введите желаемое имя пользователя: ";
-    getline(std::cin, username);
-    while (isUsernameTaken(username)) {
-        std::cout << "Имя пользователя уже занято. Введите другое имя: ";
-        getline(std::cin, username);}
-    std::cout << "Введите надежный пароль (содержащий цифру и символ $,% или _): ";
-    getline(std::cin, password);
-    while (!isPasswordStrong(password)) {
-        std::cout << "Пароль не надежный. Введите пароль снова: ";
-        getline(std::cin, password);}
-    std::cout << "Введите номер телефона (длина 10 цифр, начинается с 05): ";
-    getline(std::cin, phoneNumber);
-    while (!isValidPhoneNumber(phoneNumber)) {
-        std::cout << "Неверный номер телефона. Введите номер телефона снова: ";
-        getline(std::cin, phoneNumber);}
-    std::cout << "Вы брокер? (1 - Да, 0 - Нет): ";
-    std::cin >> isBroker;
-
-    User newUser(username, password, phoneNumber, isBroker);
-    users.push_back(newUser);
-    std::cout << "Пользователь успешно создан!" << endl;
-}*/
 
 //валидация для метода createUser()
 bool RealEstate::isUsernameTaken(const string& username) {
@@ -230,14 +206,18 @@ bool RealEstate::postNewProperty(User* loggedInUser) {
         std::cin >> floor;
     }
 
-    int numberOfRooms, propertyNumber;
+    unsigned int numberOfRooms, propertyNumber;
     std::cout << "Введите количество комнат: ";
     std::cin >> numberOfRooms;
     std::cout << "Введите номер собственности: ";
     std::cin >> propertyNumber;
-    bool isForRent;
+    unsigned int isForRent;
     std::cout << "Недвижимость сдается? (1 - да, 0 - нет): ";
     std::cin >> isForRent;
+    while (isForRent != 1 && isForRent != 0) {
+        std::cout << "Неверный выбор. Повторите ввод: ";
+        std::cin >> isForRent;
+    };
     double price;
     std::cout << "Введите цену на недвижимость: ";
     std::cin >> price;
@@ -286,15 +266,15 @@ void RealEstate::removeProperty(User* loggedInUser) {
 vector<Property> RealEstate::searchProperties() {
     vector<Property> resultProperties;
 
-    bool isForRent;
+    unsigned int isForRent;
     std::cout << "Сдается или продается? (1 - сдается, 0 - продается, 999 - любое): ";
     std::cin >> isForRent;
 
-    int propertyType;
+    unsigned int propertyType;
     std::cout << "Какой тип недвижимости вы ищете? (1 - квартира, 2 - пентхаус, 3 - частный дом, 999 - любой): ";
     std::cin >> propertyType;
 
-    int numRooms;
+    unsigned int numRooms;
     std::cout << "Желаемое количество комнат (введите 999, если не имеет значения): ";
     std::cin >> numRooms;
 
@@ -317,7 +297,7 @@ int main() {
     SetConsoleCP(1251); // Установка кодовой страницы ввода на 1251 (русская)
     SetConsoleOutputCP(1251); // Установка кодовой страницы вывода на 1251 (русская)
     
-    int choice;
+    unsigned int choice;
     do {
         cout << "Главное меню:\n";
         cout << "1 - Создать учетную запись\n";
@@ -329,7 +309,6 @@ int main() {
         switch (choice) {
         case 1:
             realEstate.createUser();
-            main();
             break;
         case 2:
             User * currentUser;
@@ -339,7 +318,7 @@ int main() {
                } else {
                    cout << "Неверное имя пользователя или пароль.\n"; }
             system("cls");
-            main();
+            continue;
             break;
         case 3:
             cout << "Программа завершена.\n";
@@ -347,7 +326,7 @@ int main() {
         default:
             cout << "Неверный выбор. Попробуйте снова.\n";
             system("cls");
-            main();
+            continue;
         }
     } while (choice != 3);
 
@@ -360,7 +339,7 @@ void RealEstate::displayMainMenu(User* loggedInUser) {
 
     cout << "Добро пожаловать, " << loggedInUser->getLogin() << "!" << endl;
     RealEstate realEstate;
-    int choice;
+    unsigned int choice;
     bool returnToMainMenu = false;
     do {
         cout << "Главное меню:\n";
