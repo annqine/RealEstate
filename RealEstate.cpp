@@ -56,8 +56,8 @@ void RealEstate::createUser(){
 
     std::cout << "Введите желаемое имя пользователя: ";
     getline(std::cin, username);
-    while (isUsernameTaken(username)) {
-        std::cout << "Имя пользователя уже занято. Введите другое имя: ";
+    while (isUsernameTaken(username) || username == "") {
+        std::cout << "Неправильое имя или имя уже занято. Введите другое имя: ";
         getline(std::cin, username);}
     std::cout << "Введите надежный пароль (содержащий цифру и символ $,% или _): ";
     getline(std::cin, password);
@@ -297,7 +297,7 @@ int main() {
     SetConsoleCP(1251); // Установка кодовой страницы ввода на 1251 (русская)
     SetConsoleOutputCP(1251); // Установка кодовой страницы вывода на 1251 (русская)
     
-    unsigned int choice;
+    char choice;
     do {
         cout << "Главное меню:\n";
         cout << "1 - Создать учетную запись\n";
@@ -307,25 +307,23 @@ int main() {
         std::cin >> choice;
 
         switch (choice) {
-        case 1:
+        case '1':
             realEstate.createUser();
             break;
-        case 2:
+        case '2':
             User * currentUser;
                currentUser = realEstate.loginUser();
                if (currentUser != nullptr) {
                    realEstate.displayMainMenu(currentUser);
                } else {
                    cout << "Неверное имя пользователя или пароль.\n"; }
-            system("cls");
             continue;
             break;
-        case 3:
+        case '3':
             cout << "Программа завершена.\n";
             break;
         default:
             cout << "Неверный выбор. Попробуйте снова.\n";
-            system("cls");
             continue;
         }
     } while (choice != 3);
@@ -339,7 +337,7 @@ void RealEstate::displayMainMenu(User* loggedInUser) {
 
     cout << "Добро пожаловать, " << loggedInUser->getLogin() << "!" << endl;
     RealEstate realEstate;
-    unsigned int choice;
+    char choice;
     bool returnToMainMenu = false;
     do {
         cout << "Главное меню:\n";
@@ -353,30 +351,29 @@ void RealEstate::displayMainMenu(User* loggedInUser) {
         std::cin >> choice;
 
         switch (choice) {
-        case 1:
+        case '1':
             postNewProperty(loggedInUser);
             system("cls");
             break;
-        case 2:
+        case '2':
             removeProperty(loggedInUser);
             system("cls");
             break;
-        case 3:
+        case '3':
             printAllProperties();
             break;
-        case 4:
+        case '4':
             printAllProperties(loggedInUser);
             break;
-        case 5:
+        case '5':
             searchProperties();
             break;
-        case 6:
+        case '6':
             system("cls");
             returnToMainMenu = true;
             break;
         default:
             cout << "Неверный выбор. Попробуйте снова.\n";
-            system("cls");
         }
     } while (!returnToMainMenu);
 
